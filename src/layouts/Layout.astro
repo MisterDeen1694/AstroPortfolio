@@ -1,6 +1,7 @@
 ---
 import type { ActionError } from "astro:actions";
 import Head from "./Head.astro";
+import Navigation from "@/components/Navigation.astro";
 
 import "@/styles/global.css";
 ---
@@ -8,6 +9,7 @@ import "@/styles/global.css";
 <html lang="en">
 	<Head {...Astro.props} />
 	<body>
+		<Navigation />
 		<main>
 			<slot />
 		</main>
