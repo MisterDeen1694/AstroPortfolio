@@ -1,14 +1,20 @@
 ---
-import { Image } from "astro:assets"
+import { Image } from "astro:assets";
 import Heading from "../ui/Heading.astro";
 import Link from "../ui/Link.astro";
 
-import Daisy from "@/assets/avatar.jpg"
+import Daisy from "@/assets/avatar.jpg";
 ---
 
 <header aria-label="Introduction to Daisy" class="hero-home">
-	<Image format="avif" alt="Baby Daisy" width={200} class="avatar" src={Daisy} />
-	<Heading size="h1" tagName="h3">👋 Hi, I’m Daisy</Heading>
+	<Image
+		format="avif"
+		alt="Baby Daisy"
+		width={200}
+		class="avatar"
+		src={Daisy}
+	/>
+	<Heading size="h1" tagName="h2">👋 Hi, I’m Daisy</Heading>
 	<p>I’m a self-taught designer and developer obsessed with quality.</p>
 	<div>
 		<Link href="#" variant="secondary">Download CV</Link>
