@@ -1,0 +1,57 @@
+---
+import ContactForm from "@/components/ContactForm.astro";
+import Hero from "@/components/projects/hero.astro";
+import ProjectTile from "@/components/ui/ProjectTile.astro";
+import Layout from "@/layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const allTools = await getCollection("tools");
+---
+
+<Layout title="Baby Daisy's Projects">
+	<div>
+		<Hero />
+		<div class="container">
+			<div class="filter-wrapper">
+				<div class="columns">
+					<p>Filter by tools</p>
+					<button class="btn badge relative" aria-pressed="true">
+						<Icon
+							name="icon--close"
+							aria-hidden="true"
+							size={18}
+							class="close"
+						/>
+						<span>Clear All</span>
+					</button>
+				</div>
+				<ul>
+					{
+						allTools.map((tools) => (
+							<li>
+								<button
+									class="btn badge relative"
+									data-tool={tools.id}
+									aria-pressed="true">
+									<span>{tools.data.title}</span>
+									<Icon
+										name="icon--close"
+										aria-hidden="true"
+										size={18}
+										class="close"
+									/>
+								</button>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<div class="grid-wrapper">
+				{projects.map(({ data }) => <ProjectTile data={data} />)}
+			</div>
+		</div>
+	</div>
+	<ContactForm />
+</Layout>
