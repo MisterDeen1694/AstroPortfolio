@@ -1,18 +1,20 @@
 {
-  "name": "portfolio",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.7.0",
-    "astro": "^4.10.2",
-    "astro-icon": "^1.1.0",
-    "typescript": "^5.4.5"
-  }
+	"name": "portfolio",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro check && astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"server": "npx json-server --watch db.json"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.7.0",
+		"astro": "^4.10.2",
+		"astro-icon": "^1.1.0",
+		"json-server": "^1.0.0-beta.1",
+		"typescript": "^5.4.5"
+	}
 }

@@ -1,0 +1,96 @@
+---
+import { Image } from "astro:assets";
+import Daisy from "@/assets/avatar.jpg";
+import Heading from "./ui/Heading.astro";
+---
+
+<section aria-label="contact Form" class="relative">
+	<div data-pattern></div>
+	<div class="form-wrapper">
+		<Image
+			src={Daisy}
+			alt="baby daisy"
+			class="headshot"
+			width={700}
+			format="avif"
+		/>
+		<form id="contact-form">
+			<Heading tagName="h2" size="h2">Let's Connect!</Heading>
+			<p>Reach out below for inquiries, quotes, or collaborations.</p>
+			<div class="input-wrapper">
+				<label for="name">First Name</label>
+				<input
+					type="text"
+					id="name"
+					name="name"
+					placeholder="e.g., Daisy"
+				/>
+			</div>
+			<div class="input-wrapper">
+				<label for="email">Email Address</label>
+				<input
+					type="email"
+					id="email"
+					name="email"
+					placeholder="e.g., Daisy@email.com"
+				/>
+			</div>
+			<button type="submit" class="btn primary">Contact Me</button>
+			<p class="message"></p>
+		</form>
+	</div>
+</section>
+
+<script>
+	const contactForm = document.querySelector(
+		"#contact-form"
+	) as HTMLFormElement;
+	const messageParagraph = document.querySelector(
+		".message"
+	) as HTMLParagraphElement;
+
+	const updateMessage = (message: string, type: "error" | "success") => {
+		messageParagraph.classList.add(type);
+		messageParagraph.textContent = message;
+		setTimeout(() => {
+			messageParagraph.textContent = "";
+			messageParagraph.classList.remove(type);
+		}, 3000);
+	};
+
+	contactForm.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		const formData = new FormData(contactForm);
+		const { name, email } = Object.fromEntries(formData);
+
+		//NEED MORE VALIDATION FOR PUBLIC USAGE
+		if (!name || typeof name !== "string" || name.length < 2) {
+			return updateMessage("Please enter a valid name", "error");
+		}
+		if (!email || typeof email !== "string" || !email.includes("@")) {
+			return updateMessage("Please enter a valid Email", "error");
+		}
+		try {
+			const res = await fetch("http://localhost:3000/contacts", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({ name, email }),
+			});
+			if (!res.ok) {
+				throw new Error("Response was not OK");
+			}
+			contactForm.reset();
+			return updateMessage("Thangs for reaching out!", "success");
+		} catch (e) {
+			if (e instanceof Error) {
+				return updateMessage(e.message, "error");
+			}
+			return updateMessage(
+				"Someting went wrong. Please try again later.",
+				"error"
+			);
+		}
+	});
+</script>
