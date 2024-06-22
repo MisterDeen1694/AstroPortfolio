@@ -1,19 +1,19 @@
 {
-  "contacts": [
-    {
-      "id": "650e",
-      "name": "Daisy",
-      "email": "Daiasyssa@email.com"
-    },
-    {
-      "id": "9102",
-      "name": "Daisy",
-      "email": "MisterDeen1694@gmail.com"
-    },
-    {
-      "id": "70f1",
-      "name": "Daisy",
-      "email": "adasd@sas.c"
-    }
-  ]
+	"contacts": [
+		{
+			"id": "650e",
+			"name": "Daisy",
+			"email": "Daiasyssa@email.com"
+		},
+		{
+			"id": "9102",
+			"name": "Daisy",
+			"email": "MisterDeen1694@gmail.com"
+		},
+		{
+			"id": "70f1",
+			"name": "Daisy",
+			"email": "adasd@sas.c"
+		}
+	]
 }

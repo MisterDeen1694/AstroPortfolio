@@ -1,13 +1,25 @@
 ---
+export const prerender = false;
+
 import ContactForm from "@/components/ContactForm.astro";
 import Hero from "@/components/projects/hero.astro";
 import ProjectTile from "@/components/ui/ProjectTile.astro";
 import Layout from "@/layouts/Layout.astro";
+import getSearchParamAsArray from "@/lib/getSearchParamAsArray";
 import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
 
-const projects = await getCollection("projects");
+let projects = await getCollection("projects");
 const allTools = await getCollection("tools");
+
+const filterItems = getSearchParamAsArray(Astro.url, "tools");
+
+if (filterItems.length > 0) {
+	projects = projects.filter((projects) => {
+		const projectTools = projects.data.icons.map((t) => t.id);
+		return filterItems.some((i) => projectTools.includes(i));
+	});
+}
 ---
 
 <Layout title="Baby Daisy's Projects">
@@ -17,15 +29,22 @@ const allTools = await getCollection("tools");
 			<div class="filter-wrapper">
 				<div class="columns">
 					<p>Filter by tools</p>
-					<button class="btn badge relative" aria-pressed="true">
-						<Icon
-							name="icon--close"
-							aria-hidden="true"
-							size={18}
-							class="close"
-						/>
-						<span>Clear All</span>
-					</button>
+					{
+						filterItems.length > 0 && (
+							<button
+								class="btn badge relative"
+								aria-pressed="true"
+								id="close-all">
+								<Icon
+									name="icon--close"
+									aria-hidden="true"
+									size={18}
+									class="close"
+								/>
+								<span>Clear All</span>
+							</button>
+						)
+					}
 				</div>
 				<ul>
 					{
@@ -34,14 +53,18 @@ const allTools = await getCollection("tools");
 								<button
 									class="btn badge relative"
 									data-tool={tools.id}
-									aria-pressed="true">
+									aria-pressed={filterItems.includes(
+										tools.id
+									)}>
 									<span>{tools.data.title}</span>
-									<Icon
-										name="icon--close"
-										aria-hidden="true"
-										size={18}
-										class="close"
-									/>
+									{filterItems.includes(tools.id) && (
+										<Icon
+											name="icon--close"
+											aria-hidden="true"
+											size={18}
+											class="close"
+										/>
+									)}
 								</button>
 							</li>
 						))
@@ -55,3 +78,41 @@ const allTools = await getCollection("tools");
 	</div>
 	<ContactForm />
 </Layout>
+
+<script>
+	import getSearchParamAsArray from "@/lib/getSearchParamAsArray";
+	import setNewUrlParams from "@/lib/setNewUrlParams";
+
+	const filters = document.querySelectorAll(
+		"[data-tool]"
+	) as NodeListOf<HTMLButtonElement>;
+	const clearAllBtn = document.querySelector("#close-all");
+
+	clearAllBtn?.addEventListener("click", () => {
+		window.location.href = "projects";
+	});
+
+	filters.forEach((filter) => {
+		filter.addEventListener("click", () => {
+			const isPressed = filter.getAttribute("aria-pressed") === "true";
+			filter.setAttribute("aria-pressed", isPressed ? "false" : "true");
+
+			const existingParams = getSearchParamAsArray(
+				new URL(window.location.href),
+				"tools"
+			);
+
+			const newParams = isPressed
+				? existingParams.filter((p) => p !== filter.dataset.tool)
+				: [...existingParams, filter.dataset.tool];
+
+			const newUrl = setNewUrlParams({
+				key: "tools",
+				url: new URL(window.location.href),
+				valueArray: newParams as string[],
+			});
+
+			window.location.assign(newUrl.toString());
+		});
+	});
+</script>
