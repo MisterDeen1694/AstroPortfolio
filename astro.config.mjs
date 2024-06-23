@@ -10,7 +10,7 @@ export default defineConfig({
 	prefetch: {
 		prefetchAll: true,
 	},
-	site: "https://stargazers.club",
+	site: "https://baby-daisys-portfolio.netlify.app/",
 	integrations: [icon(), sitemap()],
 	output: "hybrid",
 	adapter: netlify(),
